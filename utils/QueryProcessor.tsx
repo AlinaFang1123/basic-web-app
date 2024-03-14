@@ -42,22 +42,21 @@ export default function QueryProcessor(query: string): string {
     return (num1 * num2).toString();
   }
 
-  // Handle queries for numbers that are both a square and a cube (perfect sixth powers)
-  if (query.includes("which of the following numbers is both a square and a cube")) {
-    const matches = query.match(/\d+/g); // Find all numbers in the query
-    if (matches) {
-      const numbers = matches.map(Number); // Convert all found strings to numbers
-      const perfectSixthPowers = numbers.filter(num => {
-        const sixthRoot = Math.pow(num, 1/6);
-        return sixthRoot === Math.floor(sixthRoot); // Check if the sixth root is an integer
+  if (query.startsWith("Which of the following numbers is both a square and a cube:")) {
+    // Extract the numbers from the query
+    const numbersInQuery = query.match(/\d+/g); // This regex matches any sequence of digits in the query
+    if (numbersInQuery) {
+      const numbers = numbersInQuery.map(Number); // Convert the matched strings to numbers
+      // Filter numbers to find those that are both perfect squares and cubes
+      const validNumbers = numbers.filter(number => {
+        const squareRoot = Math.sqrt(number);
+        const cubeRoot = Math.cbrt(number);
+        // Check if both the square root and cube root are integers
+        return squareRoot === Math.floor(squareRoot) && cubeRoot === Math.floor(cubeRoot);
       });
 
-      if (perfectSixthPowers.length > 0) {
-        // Return the first perfect sixth power found, or modify to return all if needed
-        return perfectSixthPowers.join(", ");
-      } else {
-        return "No number is both a square and a cube.";
-      }
+      // Format the response with the found numbers, or indicate none were found
+      return `${validNumbers.join(", ")}`;
     }
   }
 
