@@ -34,5 +34,39 @@ export default function QueryProcessor(query: string): string {
     return (num1 + num2).toString(); // Perform the addition and return the result as a string
   }
 
+  // Handle multiplication queries
+  const multiplicationMatch = query.match(/what is (\d+) multiplied by (\d+)\?/);
+  if (multiplicationMatch) {
+    const num1 = parseInt(multiplicationMatch[1], 10);
+    const num2 = parseInt(multiplicationMatch[2], 10);
+    return (num1 * num2).toString();
+  }
+
+  // Handle queries for numbers that are both a square and a cube (perfect sixth powers)
+  if (query.includes("which of the following numbers is both a square and a cube")) {
+    const matches = query.match(/\d+/g); // Find all numbers in the query
+    if (matches) {
+      const numbers = matches.map(Number); // Convert all found strings to numbers
+      const perfectSixthPowers = numbers.filter(num => {
+        const sixthRoot = Math.pow(num, 1/6);
+        return sixthRoot === Math.floor(sixthRoot); // Check if the sixth root is an integer
+      });
+
+      if (perfectSixthPowers.length > 0) {
+        // Return the first perfect sixth power found, or modify to return all if needed
+        return perfectSixthPowers.join(", ");
+      } else {
+        return "No number is both a square and a cube.";
+      }
+    }
+  }
+
+  const arithmeticMatchPlus = query.match(/what is (\d+) plus (\d+)\?/i);
+  if (arithmeticMatchPlus) {
+    const num1 = parseInt(arithmeticMatchPlus[1], 10);
+    const num2 = parseInt(arithmeticMatchPlus[2], 10);
+    return (num1 + num2).toString(); // Perform the addition and return the result as a string
+  }
+
   return "no match";
 }
