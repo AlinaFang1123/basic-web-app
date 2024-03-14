@@ -34,5 +34,5 @@ export default function QueryProcessor(query: string): string {
     return (num1 + num2).toString(); // Perform the addition and return the result as a string
   }
 
-  return "";
+  return "no match";
 }
