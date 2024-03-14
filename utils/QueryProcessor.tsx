@@ -67,5 +67,14 @@ export default function QueryProcessor(query: string): string {
     return (num1 + num2).toString(); // Perform the addition and return the result as a string
   }
 
+  // Handling arithmetic expressions with multiple "plus"
+  if (query.startsWith("what is") && query.includes("plus")) {
+    const numbers = query.match(/\d+/g); // Find all numbers in the query
+    if (numbers) {
+      const sum = numbers.reduce((acc, curr) => acc + parseInt(curr, 10), 0); // Sum all found numbers
+      return sum.toString(); // Return the sum as a string
+    }
+  }
+
   return "no match";
 }
